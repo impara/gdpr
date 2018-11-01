@@ -1,0 +1,10 @@
+name = Gdpr on Login
+description = Force users to see gdpr info at login.
+core = 7.x
+
+
+version = "7.x-1.0"
+core = "7.x"
+project = "gdpr"
+datestamp = "1330819631"
+

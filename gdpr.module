@@ -1,0 +1,100 @@
+<?php
+
+function gdpr_form($form, &$form_state) {
+
+    $site_name = variable_get('site_name');
+
+    $form['login_popup_title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#required' => TRUE,
+      '#default_value' => variable_get('login_popup_title', 'Lorem ipsum dolor sit amet'),
+    );
+
+    $form['login_popup_text'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Message'),
+      '#rows' => 5,
+      '#required' => TRUE,
+      '#default_value' => variable_get('login_popup_text', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sodales, arcu vitae commodo finibus, metus ante placerat eros, at fermentum justo augue nec nulla. Fusce eu dolor fringilla, accumsan nisl ultricies, aliquam eros.'),
+    );
+
+    return system_settings_form($form);
+}
+
+function gdpr_menu() {
+    $items = array();
+
+    $items['admin/config/gdpr'] = array(
+      'title' => 'After login popup',
+      'description' => 'Configuration for Current posts module',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('gdpr_form'),
+      'access arguments' => array('access administration pages'),
+      'type' => MENU_NORMAL_ITEM,
+    );
+
+    return $items;
+}
+
+function gdpr_init() {
+
+    $path = drupal_get_path('module', 'gdpr');
+    drupal_add_css($path . '/gdpr.css');
+
+    drupal_add_js(
+        array(
+      'gdpr' => array(
+        'login_title' => variable_get('login_popup_title', 'Lorem ipsum dolor sit amet'),
+        'login_text' => variable_get('login_popup_text', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sodales, arcu vitae commodo finibus, metus ante placerat eros, at fermentum justo augue nec nulla. Fusce eu dolor fringilla, accumsan nisl ultricies, aliquam eros.'),
+      )
+        ), 'setting'
+    );
+}
+
+function gdpr_preprocess_html(&$vars) {
+
+    if (isset($_COOKIE["user"])) {
+        $path = drupal_get_path('module', 'gdpr');
+        drupal_add_js(
+            $path . '/gdpr.js');
+    }
+
+    setcookie("user", "userlogin", time() - 1);
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function gdpr_user_login(&$edit, $account) {
+    global $user;
+
+    if ($user->uid == 1) {
+        return;
+    }
+
+    $uid = $user->uid;
+
+    // return if no action is required.
+    $check = gdpr_check($uid);
+    if (empty($check)) {
+        setcookie("user", "userlogin", time() - 1);
+    }
+    else {
+        setcookie("user", "userlogin");
+    }
+}
+
+/* * *
+ * Helper functions.
+ */
+
+function gdpr_check($uid) {
+    $account = user_load($uid);
+    $access = $account->access;
+    $customdate = '1540990857';
+    if ($access < $customdate) {
+        return 1;
+    }
+    return;
+}
