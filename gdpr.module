@@ -9,7 +9,6 @@ function gdpr_form($form, &$form_state) {
       '#click_insert' => FALSE,
     );
 
-    $site_name = variable_get('site_name');
 
     $form['login_popup_title'] = array(
       '#type' => 'textfield',
@@ -17,6 +16,14 @@ function gdpr_form($form, &$form_state) {
       '#required' => TRUE,
       '#default_value' => variable_get('login_popup_title', ''),
     );
+
+    $form['login_popup_timestamp'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Start time'),
+      '#description' => t('A timestamp where the popup messege should start from'),
+      '#default_value' => variable_get('login_popup_timestamp', ''),
+      '#maxlength' => 10
+     );
 
     $form['login_popup_text'] = array(
       '#type' => 'textarea',
@@ -100,7 +107,7 @@ function gdpr_user_login(&$edit, $account) {
 function gdpr_check($uid) {
     $account = user_load($uid);
     $access = $account->access;
-    $customdate = '1542030049';
+    $customdate = variable_get('login_popup_timestamp', '');
     if ($access < $customdate) {
         return 1;
     }
