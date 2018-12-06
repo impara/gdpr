@@ -120,7 +120,7 @@ function gdpr_check($uid) {
     if (empty($customdate) || gdpr_user_has_role()) {
         return;
     }
-    if ($access < $customdate || $access < $minus) {
+    if ($access <= $customdate || $access < $minus) {
         return 1;
     }
     return;

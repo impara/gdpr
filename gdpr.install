@@ -1,0 +1,14 @@
+<?php
+
+function gdpr_install() {
+
+ variable_set('login_popup_timestamp',  date('Y-m-d H:i'));
+ variable_set('login_popup_title', '<h2>Tjek dine kontaktoplysninger</h2>');
+ variable_set('login_popup_text', '</br>Kære [user:profile-provider-fbs:user:name]</br>
+</br>Er dette stadig dine korrekte kontaktoplysninger?</br></br>
+Mail: [user:profile-provider-fbs:user:mail]</br>
+Tlf.nr: [user:profile-provider-fbs:field_fbs_phone]</br></br>
+<a href="/user/[user:uid]/edit">Tryk her for at ændre dine oplysninger.</a> </br>');
+
+}
+
