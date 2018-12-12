@@ -94,7 +94,7 @@ function gdpr_user_login(&$edit, $account) {
     // return if no action is required.
     $check = gdpr_check($uid);
     if (empty($check)) {
-        setcookie("user", "userlogin", time() - 1);
+        setcookie("user", "userlogin", 1);
     }
     else {
         setcookie("user", "userlogin");
