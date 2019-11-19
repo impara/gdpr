@@ -121,7 +121,7 @@ function gdpr_check($uid) {
         return;
     }
     if ($access <= $customdate || $access < $minus) {
-        return 1;
+        return TRUE;
     }
-    return;
+    return FALSE;
 }
