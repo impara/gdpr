@@ -86,7 +86,7 @@ function gdpr_user_login(&$edit, $account) {
     global $user;
 
     if ($user->uid == 1) {
-        return;
+        return FALSE;
     }
 
     $uid = $user->uid;
