@@ -86,8 +86,8 @@ function gdpr_user_login(&$edit, $account) {
     global $user;
 
     if ($user->uid == 1) {
-        //return FALSE;
-        watchdog('gdpr', '$user->uid == 1', array(), WATCHDOG_NOTICE);
+        return FALSE;
+        //watchdog('gdpr', '$user->uid == 1', array(), WATCHDOG_NOTICE);
     }
 
     $uid = $user->uid;
@@ -95,12 +95,12 @@ function gdpr_user_login(&$edit, $account) {
     // return if no action is required.
     $check = gdpr_check($uid);
     if (empty($check)) {
-        //setcookie("user", "userlogin", 1);
-        watchdog('gdpr', 'setcookie("user", "userlogin", 1)', array(), WATCHDOG_NOTICE);
+        setcookie("user", "userlogin", 1);
+        //watchdog('gdpr', 'setcookie("user", "userlogin", 1)', array(), WATCHDOG_NOTICE);
     }
     else {
-        //setcookie("user", "userlogin");
-        watchdog('gdpr', 'setcookie("user", "userlogin")', array(), WATCHDOG_NOTICE);
+        setcookie("user", "userlogin");
+        //watchdog('gdpr', 'setcookie("user", "userlogin")', array(), WATCHDOG_NOTICE);
     }
 }
 
@@ -108,8 +108,8 @@ function gdpr_user_has_role() {
     global $user;
     $rid = array_search('redaktør', $user->roles);
     if (user_has_role($rid)) {
-        //return TRUE;
-        watchdog('gdpr', 'user_has_role($rid)', array(), WATCHDOG_NOTICE);
+        return FALSE;
+        //watchdog('gdpr', 'user_has_role($rid)', array(), WATCHDOG_NOTICE);
     }
 }
 /* * *
@@ -122,13 +122,13 @@ function gdpr_check($uid) {
     $customdate = variable_get('login_popup_timestamp', '');
     $minus = date('Y-m-d H:i', strtotime("-6 month", $account->access));
     if (empty($customdate) || gdpr_user_has_role()) {
-        //return TRUE;
-        watchdog('gdpr', 'empty($customdate) || gdpr_user_has_role()', array(), WATCHDOG_NOTICE);
+        return TRUE;
+        //watchdog('gdpr', 'empty($customdate) || gdpr_user_has_role()', array(), WATCHDOG_NOTICE);
     }
     if ($access <= $customdate || $access < $minus) {
-        //return TRUE;
-        watchdog('gdpr', '$access <= $customdate || $access < $minus', array(), WATCHDOG_NOTICE);
+        return TRUE;
+        //watchdog('gdpr', '$access <= $customdate || $access < $minus', array(), WATCHDOG_NOTICE);
     }
-    //return FALSE;
-    watchdog('gdpr', 'return FALSE', array(), WATCHDOG_NOTICE);
+    return FALSE;
+    //watchdog('gdpr', 'return FALSE', array(), WATCHDOG_NOTICE);
 }
