@@ -118,7 +118,7 @@ function gdpr_check($uid) {
     $customdate = variable_get('login_popup_timestamp', '');
     $minus = date('Y-m-d H:i', strtotime("-6 month", $account->access));
     if (empty($customdate) || gdpr_user_has_role()) {
-        return;
+        return TRUE;
     }
     if ($access <= $customdate || $access < $minus) {
         return TRUE;
